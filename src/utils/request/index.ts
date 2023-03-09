@@ -13,6 +13,7 @@ export interface HttpOption {
 }
 
 export interface Response<T = any> {
+  token: string
   data: T
   message: string | null
   status: string
@@ -22,7 +23,7 @@ function http<T = any>(
   { url, data, method, headers, onDownloadProgress, signal, beforeRequest, afterRequest }: HttpOption,
 ) {
   const successHandler = (res: AxiosResponse<Response<T>>) => {
-    if (res.data.status === 'Success' || typeof res.data === 'string')
+    if (res.data.status === 'Success' || typeof res.data === 'string' || res.data.token)
       return res.data
 
     return Promise.reject(res.data)

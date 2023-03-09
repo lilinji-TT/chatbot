@@ -8,11 +8,15 @@ const form = reactive({
 })
 
 const handleSubmit = async () => {
-  // 提交表单逻辑
-  const res = await Login(form)
-  res && router.push({ path: '/chat' })
+  try {
+    const res = await Login(form)
+    res && router.push({ path: '/chat' })
+  }
+  catch (err) {
+    // ...
+  }
 }
-const doRegister = async () => {
+const doRegister = () => {
   router.push({ path: '/register' })
 }
 </script>

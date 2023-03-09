@@ -52,3 +52,9 @@ export function Register<T = any>(params: {
     data: { id: params.userId, password: params.password },
   })
 }
+export function fetchPrompt<T = any>(params: T) {
+  return post<T>({
+    url: '/prompt',
+    data: { prompt: params },
+  })
+}

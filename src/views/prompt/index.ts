@@ -1,3 +1,3 @@
-import Prompt from './components/prompt.vue'
+import Prompt from './components/PromptList.vue'
 
 export { Prompt }

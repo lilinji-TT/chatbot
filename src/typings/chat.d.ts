@@ -15,11 +15,21 @@ declare namespace Chat {
 		isEdit: boolean
 		uuid: number
 	}
+	interface Prompt {
+		title: string
+
+        text: string
+		isEdit: boolean
+		uuid: number
+	}
 
 	interface ChatState {
 		active: number | null
 		history: History[]
 		chat: { uuid: number; data: Chat[] }[]
+	}
+	interface PromptState {
+		prompt: Prompt[]
 	}
 
 	interface ConversationRequest {
