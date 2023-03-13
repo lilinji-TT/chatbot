@@ -1,27 +1,15 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { computed } from 'vue'
 // import { router } from '@/router'
+import { usePrompt } from '../hooks'
 import { SvgIcon } from '@/components/common'
 import { fetchPrompt } from '@/api'
 
-const promptData = { title: '此处填写问题', text: '此处填写问题的回答', isEdit: false, uuid: Date.now() }
-const List: any[] = reactive([promptData])
-
+const { addPrompt, updatePrompt, deletePrompt, getPrompt } = usePrompt()
+const promptList = computed(() => getPrompt())
 const startChat = () => {
-  fetchPrompt(List)
+  fetchPrompt(promptList)
 //   router.push({ path: '/chat' })
-}
-
-const deepClone = (obj: any) => obj
-
-const addPrompt = () => {
-  const obj = { title: '此处填写问题', text: '此处填写问题的回答', isEdit: false, uuid: Date.now() }
-  const newObj = deepClone(obj)
-  List.push(newObj)
-}
-
-const handleEdit = (index: number, isEdit: boolean) => {
-  List.map((item, i) => index === i ? item.isEdit = isEdit : item)
 }
 </script>
 
@@ -30,21 +18,26 @@ const handleEdit = (index: number, isEdit: boolean) => {
     <div class="content">
       <h1>请填写聊天风格</h1>
       <div class="form">
-        <div v-for="(data, i) of List" :key="i">
+        <div v-for="(data, i) of promptList" :key="i">
           <div class="mt-4">
-            <input v-if="data.isEdit" v-model="data.title" type="text" :placeholder="data.title">
+            <input v-if="data.isEdit" v-model="data.title" type="text">
             <span v-else>{{ data.title }}</span>
             <template v-if="data.isEdit">
-              <button class="p-1" @click="handleEdit(i, false, $event)">
+              <button class="p-1" @click="updatePrompt(i, false)">
                 <SvgIcon icon="ri:save-line" />
               </button>
             </template>
             <template v-else>
               <button class="p-1">
-                <SvgIcon icon="ri:edit-line" @click="handleEdit(i, true, $event)" />
+                <SvgIcon icon="ri:edit-line" @click="updatePrompt(i, true)" />
               </button>
+              <div v-if="i">
+                <button class="p-1" @click="deletePrompt(i)">
+                  <SvgIcon icon="ri:delete-bin-line" />
+                </button>
+              </div>
             </template>
-            <input v-model="data.text" type="text" :placeholder="data.text">
+            <input v-model="data.text" type="text">
           </div>
         </div>
         <button @click="addPrompt()">
